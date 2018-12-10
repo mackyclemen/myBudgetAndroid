@@ -18,12 +18,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    FragmentManager fm;
-    FragmentTransaction ft;
+    FragmentManager manager;
+    FragmentTransaction transaction;
+
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +34,17 @@ public class DashboardActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_dashboard);
 
-        /*FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
+        manager = getSupportFragmentManager();
+        transaction = manager.beginTransaction();
 
         Fragment newFrag = new HomeFragment();
         transaction.add(R.id.fragmentContainer, newFrag)
-                .commit();*/
+                .commit();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,22 +53,21 @@ public class DashboardActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_camera);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.nav_home);
         navigationView.setNavigationItemSelectedListener(this);
-
 
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -98,18 +100,32 @@ public class DashboardActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        // TODO: 12/10/2018 update the fragment container to categories
+        // TODO: 12/11/2018 add the remaining fragments
+
+        switch (item.getItemId()) {
+
+            case R.id.nav_home:
+                transaction = manager.beginTransaction();
+                transaction.add(new HomeFragment(), null);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                break;
+
+            default:
+                Toast.makeText(this, "Unimplemented", Toast.LENGTH_SHORT)
+                        .show();
+                navigationView.setCheckedItem(R.id.nav_home);
+        }
+
         // Handle navigation view item clicks here.
         //int id = item.getItemId();
 
-        /*FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
+        /*
 
         switch (item.getItemId()) {
-            default:
-                Fragment newFrag = new HomeFragment();
-                transaction.replace(R.id.fragmentContainer, newFrag);
-                transaction.addToBackStack(null);
-                transaction.commit();
+
         } */
 
         /*if (id == R.id.nav_camera) {

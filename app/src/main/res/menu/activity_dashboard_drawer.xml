@@ -3,7 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+    <!-- TODO 12/10/2018 edit items for myBudget use -->
+
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_home"
+            android:title="Home" />
+
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_menu_history"
+            android:title="History" />
+
+    <!--
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
@@ -20,7 +34,10 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Tools" />
+            -->
     </group>
+
+    <!--
 
     <item android:title="Communicate">
         <menu>
@@ -34,5 +51,7 @@
                 android:title="Send" />
         </menu>
     </item>
+
+    -->
 
 </menu>
