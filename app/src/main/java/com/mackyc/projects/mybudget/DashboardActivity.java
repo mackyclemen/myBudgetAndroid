@@ -1,6 +1,8 @@
 package com.mackyc.projects.mybudget;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +25,23 @@ import android.widget.Toast;
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    static final int ADD_NEW_TRANSACTION_REQUEST = 1;
+
+    static CostBreakdownItem[] costBreakdownItems = {
+            /* new CostBreakdownItem("Food", 1080),
+            new CostBreakdownItem("Essentials", 360) */
+    };
+
+    static HistoryBreakdownItem[] historyBreakdownItems = {
+            new HistoryBreakdownItem("Nagaraya", CostBreakdownItem.Category.FOOD, 25.00),
+            new HistoryBreakdownItem("Smart C", CostBreakdownItem.Category.FOOD, 25.00),
+            new HistoryBreakdownItem("Quiz Booklet", CostBreakdownItem.Category.OTHERS, 10.00)
+    };
+
+
+    static double currentCost = 1440.00;
+    static String currency = "PHP";
+
     FragmentManager manager;
     FragmentTransaction transaction;
 
@@ -37,8 +56,8 @@ public class DashboardActivity extends AppCompatActivity
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
 
-        Fragment newFrag = new HomeFragment();
-        transaction.add(R.id.fragmentContainer, newFrag)
+
+        transaction.add(R.id.fragmentContainer, new HomeFragment(), "HomeFragment")
                 .commit();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -48,8 +67,11 @@ public class DashboardActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .setAction("Action", null).show(); */
+                Intent i = new Intent(getApplicationContext(), AddTransactionActivity.class);
+                startActivityForResult(i, ADD_NEW_TRANSACTION_REQUEST);
             }
         });
 
@@ -60,18 +82,43 @@ public class DashboardActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView = findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_home);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_home);
+
 
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ADD_NEW_TRANSACTION_REQUEST:
+                if (resultCode == Activity.RESULT_OK) {
+                    // Do something
+                }
+
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    Snackbar.make(findViewById(R.id.dash), "Data discarded", Snackbar.LENGTH_LONG)
+                            .show();
+                }
+                break;
+
+
+        }
+    }
+
+    @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            Fragment currentFragment = manager.findFragmentById(R.id.fragmentContainer);
+            if (currentFragment instanceof HomeFragment)
+                navigationView.setCheckedItem(R.id.nav_home);
+            if (currentFragment instanceof HistoryFragment)
+                navigationView.setCheckedItem(R.id.nav_history);
         }
     }
 
@@ -97,27 +144,36 @@ public class DashboardActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         // TODO: 12/10/2018 update the fragment container to categories
         // TODO: 12/11/2018 add the remaining fragments
 
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        transaction = manager.beginTransaction();
+
         switch (item.getItemId()) {
 
             case R.id.nav_home:
-                transaction = manager.beginTransaction();
-                transaction.add(new HomeFragment(), null);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                if (!(fragment instanceof HomeFragment))
+                    manager.popBackStack();
+                transaction.replace(R.id.fragmentContainer, new HomeFragment());
+                break;
+
+            case R.id.nav_history:
+                if (!(fragment instanceof HistoryFragment)) {
+                    transaction.replace(R.id.fragmentContainer, new HistoryFragment())
+                            .addToBackStack("HistoryFragment");
+                }
                 break;
 
             default:
                 Toast.makeText(this, "Unimplemented", Toast.LENGTH_SHORT)
                         .show();
-                navigationView.setCheckedItem(R.id.nav_home);
         }
+
+        transaction.commit();
 
         // Handle navigation view item clicks here.
         //int id = item.getItemId();
@@ -145,5 +201,17 @@ public class DashboardActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void cardOnClickTransaction(View view) {
+        switch (view.getId()) {
+            case R.id.breakdownCard:
+                navigationView.setCheckedItem(R.id.nav_history);
+                transaction = manager.beginTransaction();
+                transaction.replace(R.id.fragmentContainer, new HistoryFragment())
+                        .addToBackStack("HistoryFragment")
+                        .commit();
+        }
+
     }
 }

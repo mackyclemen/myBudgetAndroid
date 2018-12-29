@@ -1,40 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
     <!-- TODO 12/10/2018 edit items for myBudget use -->
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/nav_main"
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_home"
-            android:title="Home" />
+            android:title="Dashboard" />
 
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_menu_history"
-            android:title="History" />
+            android:title="Transaction history" />
 
-    <!--
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_reminders"
+            android:icon="@drawable/ic_menu_reminders"
+            android:title="Reminders" />
+
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_invoices"
+            android:icon="@drawable/ic_menu_note"
+            android:title="Notes and invoices" />
+
+    </group>
+
+    <group android:id="@+id/nav_other">
+
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share_mat"
+            android:title="Share myBudget" />
+
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-            -->
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_menu_help"
+            android:title="Help &amp; Feedback" />
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_menu_about"
+            android:title="About" />
+
     </group>
 
     <!--
@@ -43,7 +57,7 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_menu_share_mat"
                 android:title="Share" />
             <item
                 android:id="@+id/nav_send"

@@ -8,38 +8,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class CostBreakdownAdapter extends RecyclerView.Adapter<CostBreakdownAdapter.MyViewHolder> {
+public class CostBreakdownAdapter extends RecyclerView.Adapter<CostBreakdownAdapter.CostBreakdownVH> {
 
     private Context mContext;
-    private static CostBreakdownList[] mItems;
+    private static CostBreakdownItem[] costBreakdownItems;
+
+    public CostBreakdownAdapter(Context context, CostBreakdownItem[] items) {
+        mContext = context;
+        costBreakdownItems = items;
+    }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CostBreakdownVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.listitem_breakdown, parent, false);
 
-        return new MyViewHolder(v);
+        return new CostBreakdownVH(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.getCategoryName().setText(mItems[position].getCategoryName());
-        holder.getCategoryTender().setText(String.valueOf(mItems[position].getCategoryCost()));
+    public void onBindViewHolder(@NonNull CostBreakdownVH holder, int position) {
+        holder.getCategoryName().setText(costBreakdownItems[position].getCategoryName());
+        holder.getCategoryTender().setText(String.valueOf(costBreakdownItems[position].getCategoryCost()));
     }
 
     @Override
     public int getItemCount() {
-        return mItems.length;
+        return costBreakdownItems.length;
     }
 
-
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class CostBreakdownVH extends RecyclerView.ViewHolder {
         private final TextView categoryName, categoryTender;
         private final Context context;
 
-        public MyViewHolder(View v) {
+        public CostBreakdownVH(View v) {
             super(v);
             categoryName = v.findViewById(R.id.categoryName);
             categoryTender = v.findViewById(R.id.categoryTender);
@@ -57,11 +61,6 @@ public class CostBreakdownAdapter extends RecyclerView.Adapter<CostBreakdownAdap
         public Context getContext() {
             return context;
         }
-    }
-
-    public CostBreakdownAdapter(Context context, CostBreakdownList[] items) {
-        mContext = context;
-        mItems = items;
     }
 
 }
