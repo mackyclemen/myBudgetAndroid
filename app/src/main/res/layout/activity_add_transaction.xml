@@ -25,17 +25,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:checkedButton="@+id/RemoveBudgetRadio"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <RadioButton
+            android:id="@+id/AddBudgetRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/AddBudget" />
 
         <RadioButton
+            android:id="@+id/RemoveBudgetRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/RemoveBudget" />
@@ -57,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/TransactionType" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/txnDesc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -81,13 +84,15 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/txnDesc" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/txnCategory"
         android:layout_width="0dp"
         android:layout_height="32dp"
         android:layout_marginTop="8dp"
+        android:entries="@array/txnCategories"
+        android:prompt="@string/TransactionCategory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_3" />
@@ -103,10 +108,10 @@
         android:textColor="@color/colorAccent"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@id/txnCategory" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/txnAmount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -123,8 +128,8 @@
         android:layout_height="wrap_content"
         android:text="PHP"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText3"
+        app:layout_constraintBottom_toBottomOf="@+id/txnAmount"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText3" />
+        app:layout_constraintTop_toTopOf="@+id/txnAmount" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,9 +1,7 @@
 package com.mackyc.projects.mybudget;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -22,22 +20,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    static final int ADD_NEW_TRANSACTION_REQUEST = 1;
+    static final int ADD_NEW_TRANSACTION_REQUEST = 0;
+    static final int MODIFY_TRANSACTION_REQUEST = 1;
 
     static CostBreakdownItem[] costBreakdownItems = {
             /* new CostBreakdownItem("Food", 1080),
             new CostBreakdownItem("Essentials", 360) */
     };
 
-    static HistoryBreakdownItem[] historyBreakdownItems = {
-            new HistoryBreakdownItem("Nagaraya", CostBreakdownItem.Category.FOOD, 25.00),
-            new HistoryBreakdownItem("Smart C", CostBreakdownItem.Category.FOOD, 25.00),
-            new HistoryBreakdownItem("Quiz Booklet", CostBreakdownItem.Category.OTHERS, 10.00)
+    static HistoryBreakdownItem[] baseItemList = {
+            new HistoryBreakdownItem(1, "Nagaraya", CostBreakdownItem.CATEGORY_FOOD, 25.00),
+            new HistoryBreakdownItem(2, "Smart C", CostBreakdownItem.CATEGORY_FOOD, 25.00),
+            new HistoryBreakdownItem(3, "Quiz Booklet", CostBreakdownItem.CATEGORY_OTHERS, 10.00)
     };
 
+    static ArrayList<HistoryBreakdownItem> breakdownItems = new ArrayList<>(Arrays.asList(baseItemList));
 
     static double currentCost = 1440.00;
     static String currency = "PHP";
@@ -71,6 +74,7 @@ public class DashboardActivity extends AppCompatActivity
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show(); */
                 Intent i = new Intent(getApplicationContext(), AddTransactionActivity.class);
+                i.putExtra("requestCode", ADD_NEW_TRANSACTION_REQUEST);
                 startActivityForResult(i, ADD_NEW_TRANSACTION_REQUEST);
             }
         });
@@ -93,6 +97,7 @@ public class DashboardActivity extends AppCompatActivity
         switch (requestCode) {
             case ADD_NEW_TRANSACTION_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
+
                     // Do something
                 }
 

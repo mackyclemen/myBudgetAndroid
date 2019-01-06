@@ -1,6 +1,5 @@
 package com.mackyc.projects.mybudget;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -10,12 +9,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import static com.mackyc.projects.mybudget.DashboardActivity.historyBreakdownItems;
+import static com.mackyc.projects.mybudget.DashboardActivity.breakdownItems;
 
 public class HistoryFragment extends Fragment {
 
@@ -30,7 +28,7 @@ public class HistoryFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
-        final HistoryBreakdownAdapter adapter = new HistoryBreakdownAdapter(getContext(), historyBreakdownItems);
+        final HistoryBreakdownAdapter adapter = new HistoryBreakdownAdapter(getContext(), breakdownItems);
 
         historyRV = v.findViewById(R.id.historyRV);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -48,10 +46,10 @@ public class HistoryFragment extends Fragment {
                     @Override
                     public void run() {
                         adapter.clear();
-                        adapter.addAll(historyBreakdownItems);
+                        adapter.addAll(breakdownItems);
                         historySwipeRefreshLayout.setRefreshing(false);
                     }
-                }, 5000);
+                }, 2000);
             }
         });
 

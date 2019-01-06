@@ -30,8 +30,39 @@ public class CostBreakdownAdapter extends RecyclerView.Adapter<CostBreakdownAdap
 
     @Override
     public void onBindViewHolder(@NonNull CostBreakdownVH holder, int position) {
-        holder.getCategoryName().setText(costBreakdownItems[position].getCategoryName());
-        holder.getCategoryTender().setText(String.valueOf(costBreakdownItems[position].getCategoryCost()));
+
+        CostBreakdownItem currentItem = costBreakdownItems[position];
+
+        String itemCategoryStr;
+
+        switch (currentItem.getCategory()) {
+            case CostBreakdownItem.CATEGORY_IMPORTANT:
+                itemCategoryStr = "Important";
+                break;
+            case CostBreakdownItem.CATEGORY_UTILITIES:
+                itemCategoryStr = "Utilities";
+                break;
+            case CostBreakdownItem.CATEGORY_FOOD:
+                itemCategoryStr = "Food";
+                break;
+            case CostBreakdownItem.CATEGORY_TRANSPORTATION:
+                itemCategoryStr = "Transportation";
+                break;
+            case CostBreakdownItem.CATEGORY_PERSONAL:
+                itemCategoryStr = "Personal";
+                break;
+            case CostBreakdownItem.CATEGORY_ENTERTAINMENT:
+                itemCategoryStr = "Entertainment";
+                break;
+            case CostBreakdownItem.CATEGORY_SUPPLIES:
+                itemCategoryStr = "Supplies";
+                break;
+            default:
+                itemCategoryStr = "Others";
+        }
+
+        holder.getCategoryName().setText(itemCategoryStr);
+        holder.getCategoryTender().setText(String.valueOf(currentItem.getCategoryCost()));
     }
 
     @Override

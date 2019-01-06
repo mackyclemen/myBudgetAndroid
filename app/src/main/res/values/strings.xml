@@ -13,6 +13,7 @@
     <string name="breakdown_CostBreakdown">Cost Breakdown</string>
     <string name="breakdown_tapInfo">Manage purchases</string>
     <string name="AddTransaction">Add Transaction</string>
+    <string name="ModifyTransaction">Modify Transaction</string>
     <string name="dialogDiscard">Discard transaction?</string>
     <string name="dialogPositive">Yes</string>
     <string name="dialogNegative">No</string>
@@ -23,4 +24,15 @@
     <string name="TransactionType">Transaction type</string>
     <string name="TransactionDescription">Transaction description</string>
     <string name="TransactionAmount">Transaction amount</string>
+
+    <string-array name="txnCategories">
+        <item>Important</item>
+        <item>Utilities</item>
+        <item>Food</item>
+        <item>Transportation</item>
+        <item>Personal</item>
+        <item>Entertainment</item>
+        <item>Supplies</item>
+        <item>Others</item>
+    </string-array>
 </resources>

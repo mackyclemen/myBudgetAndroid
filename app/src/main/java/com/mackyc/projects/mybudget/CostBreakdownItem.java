@@ -4,42 +4,22 @@ import java.util.Locale;
 
 public class CostBreakdownItem {
 
-    private Category category;
-    private String categoryName;
+    static final int CATEGORY_IMPORTANT = 0;
+    static final int CATEGORY_UTILITIES = 1;
+    static final int CATEGORY_FOOD = 2;
+    static final int CATEGORY_TRANSPORTATION = 3;
+    static final int CATEGORY_PERSONAL = 4;
+    static final int CATEGORY_ENTERTAINMENT = 5;
+    static final int CATEGORY_SUPPLIES = 6;
+    static final int CATEGORY_OTHERS = 7;
+
+
+    private int category;
     private double categoryCost;
 
-    public CostBreakdownItem(Category category, double categoryCost) {
+    public CostBreakdownItem(int category, double categoryCost) {
         this.categoryCost = categoryCost;
         this.category = category;
-        setCategoryString();
-    }
-
-    public void setCategoryString() {
-        switch (category) {
-            case IMPORTANT:
-                categoryName = "Important";
-                break;
-            case UTILITIES:
-                categoryName = "Utilities";
-                break;
-            case FOOD:
-                categoryName = "Food";
-                break;
-            case TRANSPORTATION:
-                categoryName = "Transportation";
-                break;
-            case PERSONAL:
-                categoryName = "Personal";
-                break;
-            case ENTERTAINMENT:
-                categoryName = "Entertainment";
-                break;
-            case SUPPLIES:
-                categoryName = "Supplies";
-                break;
-            default:
-                categoryName = "Others";
-        }
     }
 
     public double getCategoryCost() {
@@ -50,14 +30,14 @@ public class CostBreakdownItem {
         this.categoryCost = categoryCost;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public int getCategory() {
+        return category;
     }
 
-    enum Category {IMPORTANT, UTILITIES, FOOD, TRANSPORTATION, PERSONAL, ENTERTAINMENT, SUPPLIES, OTHERS}
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setCategory(int category) {
+        this.category = category;
     }
+
+    // enum Category {IMPORTANT, UTILITIES, FOOD, TRANSPORTATION, PERSONAL, ENTERTAINMENT, SUPPLIES, OTHERS}
 
 }

@@ -55,7 +55,35 @@ public class HomeFragment extends Fragment {
                 final TextView categoryTender = listView.findViewById(R.id.categoryTender);
                 final ProgressBar categoryProgress = listView.findViewById(R.id.categoryProgress);
 
-                categoryName.setText(currentItem.getCategoryName());
+                String itemCategoryStr;
+
+                switch (currentItem.getCategory()) {
+                    case CostBreakdownItem.CATEGORY_IMPORTANT:
+                        itemCategoryStr = "Important";
+                        break;
+                    case CostBreakdownItem.CATEGORY_UTILITIES:
+                        itemCategoryStr = "Utilities";
+                        break;
+                    case CostBreakdownItem.CATEGORY_FOOD:
+                        itemCategoryStr = "Food";
+                        break;
+                    case CostBreakdownItem.CATEGORY_TRANSPORTATION:
+                        itemCategoryStr = "Transportation";
+                        break;
+                    case CostBreakdownItem.CATEGORY_PERSONAL:
+                        itemCategoryStr = "Personal";
+                        break;
+                    case CostBreakdownItem.CATEGORY_ENTERTAINMENT:
+                        itemCategoryStr = "Entertainment";
+                        break;
+                    case CostBreakdownItem.CATEGORY_SUPPLIES:
+                        itemCategoryStr = "Supplies";
+                        break;
+                    default:
+                        itemCategoryStr = "Others";
+                }
+
+                categoryName.setText(itemCategoryStr);
                 categoryTender.setText(String.format(Locale.getDefault(), "%s%.0f", "PHP", currentItem.getCategoryCost()));
                 categoryProgress.setMax((int) currentCost);
                 categoryProgress.setProgress((int) currentItem.getCategoryCost());

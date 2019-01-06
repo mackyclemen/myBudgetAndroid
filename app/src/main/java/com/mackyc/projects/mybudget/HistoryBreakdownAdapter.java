@@ -1,7 +1,10 @@
 package com.mackyc.projects.mybudget;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.ContextMenu;
@@ -20,6 +23,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static com.mackyc.projects.mybudget.DashboardActivity.MODIFY_TRANSACTION_REQUEST;
 import static com.mackyc.projects.mybudget.DashboardActivity.currency;
 
 public class HistoryBreakdownAdapter extends RecyclerView.Adapter<HistoryBreakdownAdapter.HistoryBreakdownVH> {
@@ -53,12 +57,40 @@ public class HistoryBreakdownAdapter extends RecyclerView.Adapter<HistoryBreakdo
     public void onBindViewHolder(@NonNull HistoryBreakdownVH holder, int position) {
         HistoryBreakdownItem item = mItems.get(position);
         holder.getItemName().setText(item.getItemName());
-        holder.getItemCategory().setText(item.getItemCategoryString());
+
+        String itemCategoryStr;
+
+        switch (item.getItemCategory()) {
+            case CostBreakdownItem.CATEGORY_IMPORTANT:
+                itemCategoryStr = "Important";
+                break;
+            case CostBreakdownItem.CATEGORY_UTILITIES:
+                itemCategoryStr = "Utilities";
+                break;
+            case CostBreakdownItem.CATEGORY_FOOD:
+                itemCategoryStr = "Food";
+                break;
+            case CostBreakdownItem.CATEGORY_TRANSPORTATION:
+                itemCategoryStr = "Transportation";
+                break;
+            case CostBreakdownItem.CATEGORY_PERSONAL:
+                itemCategoryStr = "Personal";
+                break;
+            case CostBreakdownItem.CATEGORY_ENTERTAINMENT:
+                itemCategoryStr = "Entertainment";
+                break;
+            case CostBreakdownItem.CATEGORY_SUPPLIES:
+                itemCategoryStr = "Supplies";
+                break;
+            default:
+                itemCategoryStr = "Others";
+        }
+
+        holder.getItemCategory().setText(itemCategoryStr);
         holder.getItemCost().setText(String.format(Locale.getDefault(), "%s%.0f", currency, item.getItemCost()));
 
         if (DateUtils.isToday(item.getItemDateTime().getTime())) {
 
-            holder.getItemDateTime().setText(item.getItemTime());
             DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT);
             String formattedTime = df.format(item.getItemDateTime());
 
@@ -67,7 +99,6 @@ public class HistoryBreakdownAdapter extends RecyclerView.Adapter<HistoryBreakdo
         } else {
 
             SimpleDateFormat sdf = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
-            sdf.applyPattern(sdf.toPattern().replaceAll("[@\\p{Alpha}]*y+[@^\\p{Alpha}]*", ""));
             String formattedDate = sdf.format(item.getItemDateTime());
 
             holder.getItemDateTime().setText(formattedDate);
@@ -76,7 +107,7 @@ public class HistoryBreakdownAdapter extends RecyclerView.Adapter<HistoryBreakdo
 
     @Override
     public int getItemCount() {
-        return historyBreakdownItems.length;
+        return mItems.size();
     }
 
     public void clear() {
@@ -84,18 +115,8 @@ public class HistoryBreakdownAdapter extends RecyclerView.Adapter<HistoryBreakdo
         notifyDataSetChanged();
     }
 
-    public void addEntry(HistoryBreakdownItem item) {
-        mItems.add(item);
-        notifyDataSetChanged();
-    }
-
-    public void removeEntry(int index) {
-        mItems.remove(index);
-        notifyDataSetChanged();
-    }
-
-    public void addAll(HistoryBreakdownItem[] items) {
-        historyBreakdownItems = items;
+    public void addAll(ArrayList<HistoryBreakdownItem> items) {
+        mItems = items;
         notifyDataSetChanged();
     }
 
@@ -112,6 +133,20 @@ public class HistoryBreakdownAdapter extends RecyclerView.Adapter<HistoryBreakdo
             itemCost = v.findViewById(R.id.historyPrice);
             itemDateTime = v.findViewById(R.id.historyDate);
             context = v.getContext();
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getContext(), AddTransactionActivity.class);
+                    i.putExtra("TxnName", mItems.get(getAdapterPosition()).getItemName());
+                    i.putExtra("TxnCredit", mItems.get(getAdapterPosition()).isCredit());
+                    i.putExtra("TxnCost", mItems.get(getAdapterPosition()).getItemCost());
+                    i.putExtra("TxnCategory", mItems.get(getAdapterPosition()).getItemCategory());
+
+                    i.putExtra("requestCode", MODIFY_TRANSACTION_REQUEST);
+                    ((Activity) context).startActivityForResult(i, DashboardActivity.MODIFY_TRANSACTION_REQUEST);
+                }
+            });
         }
 
         public TextView getItemName() {
