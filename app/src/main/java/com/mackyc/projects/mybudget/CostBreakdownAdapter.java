@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class CostBreakdownAdapter extends RecyclerView.Adapter<CostBreakdownAdapter.CostBreakdownVH> {
@@ -63,6 +64,8 @@ public class CostBreakdownAdapter extends RecyclerView.Adapter<CostBreakdownAdap
 
         holder.getCategoryName().setText(itemCategoryStr);
         holder.getCategoryTender().setText(String.valueOf(currentItem.getCategoryCost()));
+        holder.getCategoryProgress().setMax((int)DashboardActivity.currentSavings);
+        holder.getCategoryProgress().setProgress(currentItem.getCategory());
     }
 
     @Override
@@ -72,12 +75,14 @@ public class CostBreakdownAdapter extends RecyclerView.Adapter<CostBreakdownAdap
 
     public static class CostBreakdownVH extends RecyclerView.ViewHolder {
         private final TextView categoryName, categoryTender;
+        private final ProgressBar categoryProgress;
         private final Context context;
 
         public CostBreakdownVH(View v) {
             super(v);
             categoryName = v.findViewById(R.id.categoryName);
             categoryTender = v.findViewById(R.id.categoryTender);
+            categoryProgress = v.findViewById(R.id.categoryProgress);
             context = v.getContext();
         }
 
@@ -87,6 +92,10 @@ public class CostBreakdownAdapter extends RecyclerView.Adapter<CostBreakdownAdap
 
         public TextView getCategoryTender() {
             return categoryTender;
+        }
+
+        public ProgressBar getCategoryProgress() {
+            return categoryProgress;
         }
 
         public Context getContext() {

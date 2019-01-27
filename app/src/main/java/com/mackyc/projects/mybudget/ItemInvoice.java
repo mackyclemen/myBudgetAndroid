@@ -2,7 +2,7 @@ package com.mackyc.projects.mybudget;
 
 import java.util.Date;
 
-public class HistoryBreakdownItem {
+public class ItemInvoice {
 
     private final int itemID;
     private String itemName;
@@ -11,9 +11,9 @@ public class HistoryBreakdownItem {
     private Date itemDateTime;
     private boolean isCredit = true;
 
-    private long noteID;
+    private String note;
 
-    public HistoryBreakdownItem(int itemID, String itemName, int itemCategory, double itemCost) {
+    public ItemInvoice(int itemID, String itemName, int itemCategory, double itemCost) {
         this.itemID = itemID;
         this.itemName = itemName;
         this.itemCategory = itemCategory;
@@ -21,14 +21,13 @@ public class HistoryBreakdownItem {
         this.itemDateTime = new Date();
     }
 
-    public HistoryBreakdownItem(int itemID, String itemName, int itemCategory, double itemCost,
-                                long noteID) {
+    public ItemInvoice(int itemID, String itemName, int itemCategory, double itemCost, String itemNote) {
         this.itemID = itemID;
         this.itemName = itemName;
         this.itemCategory = itemCategory;
         this.itemCost = itemCost;
         this.itemDateTime = new Date();
-        this.noteID = noteID;
+        this.note = itemNote;
     }
 
     public String getItemName() {
@@ -63,12 +62,12 @@ public class HistoryBreakdownItem {
         this.itemCost = itemCost;
     }
 
-    public long getNoteID() {
-        return noteID;
+    public String getNote() {
+        return note;
     }
 
-    public void setNoteID(long noteID) {
-        this.noteID = noteID;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public boolean isCredit() {

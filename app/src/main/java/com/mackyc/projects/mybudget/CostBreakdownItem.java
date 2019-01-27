@@ -1,7 +1,5 @@
 package com.mackyc.projects.mybudget;
 
-import java.util.Locale;
-
 public class CostBreakdownItem {
 
     static final int CATEGORY_IMPORTANT = 0;
@@ -14,12 +12,24 @@ public class CostBreakdownItem {
     static final int CATEGORY_OTHERS = 7;
 
 
+
+    static final boolean TYPE_CREDIT = false;
+    static final boolean TYPE_SAVINGS = true;
+
+    private boolean breakdownType;
     private int category;
     private double categoryCost;
 
     public CostBreakdownItem(int category, double categoryCost) {
         this.categoryCost = categoryCost;
         this.category = category;
+        this.breakdownType = TYPE_CREDIT;
+    }
+
+    public CostBreakdownItem(int category, double categoryCost, boolean breakdownType) {
+        this.categoryCost = categoryCost;
+        this.category = category;
+        this.breakdownType = breakdownType;
     }
 
     public double getCategoryCost() {

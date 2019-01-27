@@ -21,14 +21,9 @@
             android:title="Transaction history" />
 
         <item
-            android:id="@+id/nav_reminders"
-            android:icon="@drawable/ic_menu_reminders"
-            android:title="Reminders" />
-
-        <item
             android:id="@+id/nav_invoices"
             android:icon="@drawable/ic_menu_note"
-            android:title="Notes and invoices" />
+            android:title="Notes" />
 
     </group>
 

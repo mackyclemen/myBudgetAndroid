@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,47 +13,41 @@ import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import static com.mackyc.projects.mybudget.DashboardActivity.MODIFY_TRANSACTION_REQUEST;
 import static com.mackyc.projects.mybudget.DashboardActivity.currency;
 
-public class HistoryBreakdownAdapter extends RecyclerView.Adapter<HistoryBreakdownAdapter.HistoryBreakdownVH> {
+public class ItemInvoiceAdapter extends RecyclerView.Adapter<ItemInvoiceAdapter.ItemInvoiceVH> {
 
-    private static ArrayList<HistoryBreakdownItem> mItems;
-    private static HistoryBreakdownItem[] historyBreakdownItems;
+    private static ArrayList<ItemInvoice> mItems = new ArrayList<>();
     private Context context;
 
-    public HistoryBreakdownAdapter(Context context, HistoryBreakdownItem[] items) {
+    public ItemInvoiceAdapter(Context context, ItemInvoice[] items) {
         this.context = context;
-        mItems = new ArrayList<>();
         mItems.addAll(Arrays.asList(items));
     }
 
-    public HistoryBreakdownAdapter(Context context, ArrayList<HistoryBreakdownItem> items) {
+    public ItemInvoiceAdapter(Context context, ArrayList<ItemInvoice> items) {
         this.context = context;
         mItems = items;
     }
 
     @NonNull
     @Override
-    public HistoryBreakdownVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ItemInvoiceVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.listitem_history, parent, false);
 
-        return new HistoryBreakdownVH(view);
+        return new ItemInvoiceVH(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HistoryBreakdownVH holder, int position) {
-        HistoryBreakdownItem item = mItems.get(position);
+    public void onBindViewHolder(@NonNull ItemInvoiceVH holder, int position) {
+        ItemInvoice item = mItems.get(position);
         holder.getItemName().setText(item.getItemName());
 
         String itemCategoryStr;
@@ -87,7 +79,7 @@ public class HistoryBreakdownAdapter extends RecyclerView.Adapter<HistoryBreakdo
         }
 
         holder.getItemCategory().setText(itemCategoryStr);
-        holder.getItemCost().setText(String.format(Locale.getDefault(), "%s%.0f", currency, item.getItemCost()));
+        holder.getItemCost().setText(String.format(Locale.getDefault(), "%s%.2f", currency, item.getItemCost()));
 
         if (DateUtils.isToday(item.getItemDateTime().getTime())) {
 
@@ -110,23 +102,27 @@ public class HistoryBreakdownAdapter extends RecyclerView.Adapter<HistoryBreakdo
         return mItems.size();
     }
 
+    public void addAll(ArrayList<ItemInvoice> items) {
+        mItems = new ArrayList<>(items);
+        notifyDataSetChanged();
+    }
+
+    public void addAll(ItemInvoice[] items) {
+        mItems = new ArrayList<>(Arrays.asList(items));
+        notifyDataSetChanged();
+    }
+
     public void clear() {
-        historyBreakdownItems = new HistoryBreakdownItem[]{};
-        notifyDataSetChanged();
+        mItems = null;
     }
 
-    public void addAll(ArrayList<HistoryBreakdownItem> items) {
-        mItems = items;
-        notifyDataSetChanged();
-    }
-
-    public static class HistoryBreakdownVH extends RecyclerView.ViewHolder {
+    public static class ItemInvoiceVH extends RecyclerView.ViewHolder {
 
         private final TextView itemName, itemCategory, itemCost, itemDateTime;
         private final Context context;
 
 
-        public HistoryBreakdownVH(View v) {
+        public ItemInvoiceVH(View v) {
             super(v);
             itemName = v.findViewById(R.id.historyName);
             itemCategory = v.findViewById(R.id.historyCategory);

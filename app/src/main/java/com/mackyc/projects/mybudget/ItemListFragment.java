@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import static com.mackyc.projects.mybudget.DashboardActivity.breakdownItems;
 
-public class HistoryFragment extends Fragment {
+public class ItemListFragment extends Fragment {
 
     RecyclerView historyRV;
     SwipeRefreshLayout historySwipeRefreshLayout;
@@ -28,7 +28,7 @@ public class HistoryFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
-        final HistoryBreakdownAdapter adapter = new HistoryBreakdownAdapter(getContext(), breakdownItems);
+        final ItemInvoiceAdapter adapter = new ItemInvoiceAdapter(getContext(), breakdownItems);
 
         historyRV = v.findViewById(R.id.historyRV);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());

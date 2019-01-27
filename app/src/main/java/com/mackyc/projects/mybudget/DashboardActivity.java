@@ -18,10 +18,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,19 +33,22 @@ public class DashboardActivity extends AppCompatActivity
     static final int MODIFY_TRANSACTION_REQUEST = 1;
 
     static CostBreakdownItem[] costBreakdownItems = {
-            /* new CostBreakdownItem("Food", 1080),
-            new CostBreakdownItem("Essentials", 360) */
+            new CostBreakdownItem(CostBreakdownItem.CATEGORY_FOOD, 50.00),
+            new CostBreakdownItem(CostBreakdownItem.CATEGORY_OTHERS, 2510.00)
     };
 
-    static HistoryBreakdownItem[] baseItemList = {
-            new HistoryBreakdownItem(1, "Nagaraya", CostBreakdownItem.CATEGORY_FOOD, 25.00),
-            new HistoryBreakdownItem(2, "Smart C", CostBreakdownItem.CATEGORY_FOOD, 25.00),
-            new HistoryBreakdownItem(3, "Quiz Booklet", CostBreakdownItem.CATEGORY_OTHERS, 10.00)
+    static ItemInvoice[] baseItemList = {
+            new ItemInvoice(1, "Nagaraya", CostBreakdownItem.CATEGORY_FOOD, 25.00, "Not so healthy, but my hunger should suffice a bit."),
+            new ItemInvoice(2, "Smart C", CostBreakdownItem.CATEGORY_FOOD, 25.00, "A healthy alternative to carbonated drinks."),
+            new ItemInvoice(3, "Quiz Booklet", CostBreakdownItem.CATEGORY_OTHERS, 10.00),
+            new ItemInvoice(4, "DO_NOT_USE", CostBreakdownItem.CATEGORY_OTHERS, 2500.00, "What is this even?")
     };
 
-    static ArrayList<HistoryBreakdownItem> breakdownItems = new ArrayList<>(Arrays.asList(baseItemList));
+    static ArrayList<ItemInvoice> breakdownItems = new ArrayList<>(Arrays.asList(baseItemList));
+    static ArrayList<CostBreakdownItem> itemArrayList = new ArrayList<>(Arrays.asList(costBreakdownItems));
 
-    static double currentCost = 1440.00;
+    static double currentCost;
+    static double currentSavings = 150.00;
     static String currency = "PHP";
 
     FragmentManager manager;
@@ -54,7 +60,32 @@ public class DashboardActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        for (ItemInvoice item:breakdownItems) {
+            currentCost += item.getItemCost();
+        }
+
         setContentView(R.layout.activity_dashboard);
+
+        TextView currency_cost = findViewById(R.id.currency_currentCost);
+        TextView currency_savings = findViewById(R.id.currency_currentSavings);
+        TextView cost = findViewById(R.id.currentCost);
+        TextView savings = findViewById(R.id.currentSavings);
+        ProgressBar costBar = findViewById(R.id.costBar);
+
+
+        if (currentCost < currentSavings) {
+            costBar.setMax((int) currentSavings);
+            costBar.setProgress((int) currentCost);
+        } else {
+            costBar.setMax(100);
+            costBar.setProgress(100);
+            savings.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+        }
+
+        currency_cost.setText(currency);
+        currency_savings.setText(currency);
+        cost.setText(String.format(Locale.getDefault(), "%.2f", currentCost));
+        savings.setText(String.format(Locale.getDefault(), "%.2f", currentSavings));
 
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
@@ -92,6 +123,8 @@ public class DashboardActivity extends AppCompatActivity
 
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -122,7 +155,7 @@ public class DashboardActivity extends AppCompatActivity
             Fragment currentFragment = manager.findFragmentById(R.id.fragmentContainer);
             if (currentFragment instanceof HomeFragment)
                 navigationView.setCheckedItem(R.id.nav_home);
-            if (currentFragment instanceof HistoryFragment)
+            if (currentFragment instanceof ItemListFragment)
                 navigationView.setCheckedItem(R.id.nav_history);
         }
     }
@@ -164,12 +197,14 @@ public class DashboardActivity extends AppCompatActivity
                 if (!(fragment instanceof HomeFragment))
                     manager.popBackStack();
                 transaction.replace(R.id.fragmentContainer, new HomeFragment());
+                transaction.commit();
                 break;
 
             case R.id.nav_history:
-                if (!(fragment instanceof HistoryFragment)) {
-                    transaction.replace(R.id.fragmentContainer, new HistoryFragment())
-                            .addToBackStack("HistoryFragment");
+                if (!(fragment instanceof ItemListFragment)) {
+                    transaction.replace(R.id.fragmentContainer, new ItemListFragment())
+                            .addToBackStack("ItemListFragment");
+                    transaction.commit();
                 }
                 break;
 
@@ -178,7 +213,6 @@ public class DashboardActivity extends AppCompatActivity
                         .show();
         }
 
-        transaction.commit();
 
         // Handle navigation view item clicks here.
         //int id = item.getItemId();
@@ -203,7 +237,7 @@ public class DashboardActivity extends AppCompatActivity
 
         }*/
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -213,8 +247,8 @@ public class DashboardActivity extends AppCompatActivity
             case R.id.breakdownCard:
                 navigationView.setCheckedItem(R.id.nav_history);
                 transaction = manager.beginTransaction();
-                transaction.replace(R.id.fragmentContainer, new HistoryFragment())
-                        .addToBackStack("HistoryFragment")
+                transaction.replace(R.id.fragmentContainer, new ItemListFragment())
+                        .addToBackStack("ItemListFragment")
                         .commit();
         }
 

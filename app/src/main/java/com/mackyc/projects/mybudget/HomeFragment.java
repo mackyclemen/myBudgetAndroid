@@ -14,16 +14,18 @@ import java.util.Locale;
 
 import static com.mackyc.projects.mybudget.DashboardActivity.costBreakdownItems;
 import static com.mackyc.projects.mybudget.DashboardActivity.currentCost;
+import static com.mackyc.projects.mybudget.DashboardActivity.itemArrayList;
 
 public class HomeFragment extends Fragment {
 
     LinearLayout costBreakdownList;
+    View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
+        v = inflater.inflate(R.layout.fragment_home, container, false);
 
         costBreakdownList = v.findViewById(R.id.breakdownCard_list);
 
@@ -46,10 +48,11 @@ public class HomeFragment extends Fragment {
         } else {
 
             LayoutInflater listInflater = getLayoutInflater();
-            for (int pos = 0; pos < Math.min(costBreakdownItems.length, 3); pos++) {
+
+            for (int pos = 0; pos < Math.min(itemArrayList.size(), 3); pos++) {
 
                 View listView = listInflater.inflate(R.layout.listitem_breakdown, costBreakdownList, false);
-                CostBreakdownItem currentItem = costBreakdownItems[pos];
+                CostBreakdownItem currentItem = itemArrayList.get(pos);
 
                 final TextView categoryName = listView.findViewById(R.id.categoryName);
                 final TextView categoryTender = listView.findViewById(R.id.categoryTender);
@@ -84,7 +87,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 categoryName.setText(itemCategoryStr);
-                categoryTender.setText(String.format(Locale.getDefault(), "%s%.0f", "PHP", currentItem.getCategoryCost()));
+                categoryTender.setText(String.format(Locale.getDefault(), "%s%.2f", "PHP", currentItem.getCategoryCost()));
                 categoryProgress.setMax((int) currentCost);
                 categoryProgress.setProgress((int) currentItem.getCategoryCost());
 
